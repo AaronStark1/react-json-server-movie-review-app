@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import AddMovie from "./pages/AddMovie";
-import Auth from "./pages/auth";
+import Auth from "./pages/Auth";
 import MyReviews from "./pages/MyReviews";
 import EditReview from "./pages/EditReviews";
 
