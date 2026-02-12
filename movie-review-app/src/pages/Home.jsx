@@ -7,7 +7,11 @@ import {
   FormControlLabel,
   Radio,
   FormControl,
-  FormLabel
+  FormLabel,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { getAllMoviesAPI } from "../services/allAPIs";
@@ -20,7 +24,8 @@ const Home = () => {
   const [movies, setMovies] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
 
-  const [genre, setGenre] = useState("all"); 
+  const [genre, setGenre] = useState("all");
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
     const logged = localStorage.getItem("loggedInUser");
@@ -117,7 +122,8 @@ const Home = () => {
             >
               <MovieCard
                 movie={movie}
-                onClick={() => navigate(`/movies/${movie.id}`)}
+                onClick={() => setSelectedMovie(movie)}
+
               />
             </Grid>
           ))}
@@ -133,6 +139,100 @@ const Home = () => {
           </Typography>
         )}
       </Box>
+<Dialog
+  open={Boolean(selectedMovie)}
+  onClose={() => setSelectedMovie(null)}
+  maxWidth="sm"
+  fullWidth
+  PaperProps={{
+    sx: {
+      borderRadius: 4,
+      background:
+        "linear-gradient(180deg, rgba(255,240,255,0.95), rgba(240,220,255,0.95))",
+      boxShadow: "0 12px 35px rgba(80,30,110,0.3)",
+      p: 1,
+    },
+  }}
+>
+  {selectedMovie && (
+    <>
+      <DialogTitle
+        sx={{
+          fontWeight: 800,
+          color: "rgba(70,20,95,0.95)",
+          letterSpacing: 0.5,
+        }}
+      >
+        {selectedMovie.title}
+      </DialogTitle>
+
+      <DialogContent>
+
+        {/* Poster (Full Visible) */}
+        <Box
+          component="img"
+          src={selectedMovie.poster}
+          alt={selectedMovie.title}
+          sx={{
+            width: "100%",
+            borderRadius: 3,
+            mb: 2,
+            boxShadow: "0 6px 20px rgba(80,30,110,0.25)",
+          }}
+        />
+
+        <Typography
+          variant="body1"
+          sx={{
+            fontWeight: 600,
+            color: "rgba(60,15,80,0.9)",
+            mb: 1,
+          }}
+        >
+          Genre: {selectedMovie.genre}
+        </Typography>
+
+        <Typography
+          variant="body1"
+          sx={{
+            fontWeight: 600,
+            color: "rgba(60,15,80,0.9)",
+            mb: 1,
+          }}
+        >
+          Rating: ⭐ {selectedMovie.rating}
+        </Typography>
+
+        <Typography
+          variant="body2"
+          sx={{
+            mt: 2,
+            color: "rgba(50,10,70,0.85)",
+            lineHeight: 1.6,
+          }}
+        >
+          {selectedMovie.review}
+        </Typography>
+
+        <Typography
+          variant="caption"
+          sx={{
+            display: "block",
+            mt: 2,
+            opacity: 0.7,
+            fontStyle: "italic",
+            color: "rgba(70,20,95,0.8)",
+          }}
+        >
+          Reviewed by: {selectedMovie.user}
+        </Typography>
+
+      </DialogContent>
+    </>
+  )}
+</Dialog>
+
+
     </Box>
   );
 };
